@@ -12,11 +12,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import javafx.scene.control.Tooltip;
 
 
 public class mainViewController implements Initializable {
@@ -67,6 +70,7 @@ public class mainViewController implements Initializable {
         mainPane.getChildren().addAll(control);
         stringBuilder = new StringBuilder();
         prepareTimeline();
+        createTooltips();
         setListeners();
     }
 
@@ -95,19 +99,19 @@ public class mainViewController implements Initializable {
             mainPane.getScene().getWindow().setY(event.getScreenY() - yOffset);
         });
 
-        startButton.setOnAction(event->{
-            if(started == false){
+        startButton.setOnAction(event -> {
+            if (started == false) {
                 timeline.play();
                 startButton.setStyle("-fx-background-image: url('/images/stop.png');");
                 started = true;
-            }else{
+            } else {
                 timeline.stop();
                 startButton.setStyle("-fx-background-image: url('/images/start.png');");
                 started = false;
             }
         });
 
-        resetButton.setOnAction(event-> {
+        resetButton.setOnAction(event -> {
             started = false;
             minutes = 0;
             seconds = 0;
@@ -117,7 +121,7 @@ public class mainViewController implements Initializable {
 
         exitButton.setOnAction(event -> Platform.exit());
 
-        copyButton.setOnAction(event ->{
+        copyButton.setOnAction(event -> {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             StringSelection stringSelection = new StringSelection(control.getText());
             clipboard.setContents(stringSelection, null);
@@ -137,5 +141,23 @@ public class mainViewController implements Initializable {
 
         timeline.setCycleCount(-1);
         timeline.setAutoReverse(false);
+    }
+
+    private void createTooltips() {
+        Tooltip startStop = new Tooltip();
+        startStop.setText("Start / Stop");
+        startButton.setTooltip(startStop);
+
+        Tooltip reset = new Tooltip();
+        reset.setText("Reset");
+        resetButton.setTooltip(reset);
+
+        Tooltip exit = new Tooltip();
+        exit.setText("Exit");
+        exitButton.setTooltip(exit);
+
+        Tooltip copy = new Tooltip();
+        copy.setText("Copy");
+        copyButton.setTooltip(copy);
     }
 }
